@@ -66,19 +66,19 @@ const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat }) => {
     const [previous, setPrevious] = useState<BoardProps["snakeHead"][]>([]);
 
     useEffect(() => {
-        setPrevious(last => {
+        setPrevious(prev => {
             // see if the food has been eaten
             if (isEqual(food, snakeHead)) {
                 onEat();
             };
 
             // if the length is equal or more than the length, then simulate movement
-            if (last.length >= length) {
-                return [...last.slice(1), snakeHead];
+            if (prev.length >= length) {
+                return [...prev.slice(1), snakeHead];
             };
 
             // if it is not longer, then append the snake
-            return [...last, snakeHead];
+            return [...prev, snakeHead];
         });
     }, [move]);
 
