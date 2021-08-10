@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from "react";
 
 import { makeStyles, createStyles } from "@material-ui/styles";
+import { isEqual } from "lodash";
 
 const useStyles = makeStyles(_ => createStyles({
     root: {
@@ -28,17 +29,24 @@ const useStyles = makeStyles(_ => createStyles({
 }));
 
 interface BoardProps {
+    length: number;
+    move: boolean;
+
     pos: {
         x: number;
         y: number;
     };
-    length: number;
-    moving: boolean
+    food: {
+        x: number;
+        y: number;
+    };
+
+    onEat: () => void;
 };
 
-type Color = "gray" | "green";
+type Color = "gray" | "green" | "red";
 
-const Board: FC<BoardProps> = ({ pos, length, moving }) => {
+const Board: FC<BoardProps> = ({ pos, length, move, food, onEat }) => {
     const classes = useStyles();
     
     // here is the array of the snake's body -> Position[], could've used a linked list
@@ -46,6 +54,11 @@ const Board: FC<BoardProps> = ({ pos, length, moving }) => {
 
     useEffect(() => {
         setPrevious(last => {
+            // see if the food has been eaten
+            if (isEqual(food, pos)) {
+                onEat();
+            };
+
             // if the length is equal or more than the length, then simulate movement
             if (last.length >= length) {
                 return [...last.slice(1), pos];
@@ -54,9 +67,12 @@ const Board: FC<BoardProps> = ({ pos, length, moving }) => {
             // if it is not longer, then append the snake
             return [...last, pos];
         });
-    }, [moving, length]);
+    }, [move]);
 
-    const handleSnakeBody = (x: number, y: number): Color => {
+    const handleBoard = (x: number, y: number): Color => {
+        // show the food
+        if (x === food.x && y === food.y) return "red";
+
         // make the snake's body green, and the play area gray
         for (const value of previous) {
             if (x === value.x && y === value.y) return "green";
@@ -78,8 +94,8 @@ const Board: FC<BoardProps> = ({ pos, length, moving }) => {
                                     <div
                                         className={classes.box}
                                         style={{
-                                            backgroundColor: handleSnakeBody(x, y),
-                                            opacity: handleSnakeBody(x, y) === "gray" ?
+                                            backgroundColor: handleBoard(x, y),
+                                            opacity: handleBoard(x, y) === "gray" ?
                                                 0.4 : 1,
                                         }}
                                         key={x}

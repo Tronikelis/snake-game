@@ -24,8 +24,18 @@ const useStyles = makeStyles(_ => createStyles({
 // movement types
 type Movement = "forwards" | "backwards" | "left" | "right";
 
+// coordinate type
+interface Coordinates {
+    x: number;
+    y: number;
+};
+
 const Snake: FC = () => {
     const classes = useStyles();
+
+    /**
+     * Movement 
+    */
 
     // should move
     const [move, setMove] = useState(true);
@@ -36,6 +46,9 @@ const Snake: FC = () => {
     // snake's current position
     const [posX, setPosX] = useState(1);
     const [posY, setPosY] = useState(1);
+
+    // snake's current length
+    const [length, setLength] = useState(1);
 
     // every 0.35 second move the snake 
     useInterval(() => {
@@ -84,6 +97,27 @@ const Snake: FC = () => {
         };
     });
 
+    /**
+     * Food 
+    */
+
+    // food's position
+    const [food, setFood] = useState<Coordinates>({
+        x: Math.round(Math.random() * 20),
+        y: Math.round(Math.random() * 20),
+    });
+
+    const handleEat = () => {
+        // lengthen the snake
+        setLength(prev => prev + 1);
+        setFood(prev => {
+            prev.x = Math.round(Math.random() * 20);
+            prev.y = Math.round(Math.random() * 20);
+            return { ...prev };
+        });
+    };
+
+
     return (
         <div className={classes.root}>
             <h1>Tronikel's shitty snake game</h1>
@@ -92,8 +126,10 @@ const Snake: FC = () => {
                     x: posX,
                     y: posY,
                 }}
-                length={5}
-                moving={move}
+                length={length}
+                move={move}
+                food={food}
+                onEat={handleEat}
             />
         </div>
     );
