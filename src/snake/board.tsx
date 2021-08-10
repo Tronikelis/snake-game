@@ -29,43 +29,56 @@ const useStyles = makeStyles(_ => createStyles({
 }));
 
 interface BoardProps {
+    /**
+     * The snake's current length in blocks
+     */
     length: number;
+    /**
+     * State when the snake moves, setState(!state), to fire useEffect
+     */
     move: boolean;
-
-    pos: {
+    /**
+     * Snake's current head position in coordinates
+     */
+    snakeHead: {
         x: number;
         y: number;
     };
+    /**
+     * The food's current coordinates
+     */
     food: {
         x: number;
         y: number;
     };
-
+    /**
+     * Callback when the snake eats the food, used to change the food's coordinates
+     */
     onEat: () => void;
 };
 
 type Color = "gray" | "green" | "red";
 
-const Board: FC<BoardProps> = ({ pos, length, move, food, onEat }) => {
+const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat }) => {
     const classes = useStyles();
     
     // here is the array of the snake's body -> Position[], could've used a linked list
-    const [previous, setPrevious] = useState<BoardProps["pos"][]>([]);
+    const [previous, setPrevious] = useState<BoardProps["snakeHead"][]>([]);
 
     useEffect(() => {
         setPrevious(last => {
             // see if the food has been eaten
-            if (isEqual(food, pos)) {
+            if (isEqual(food, snakeHead)) {
                 onEat();
             };
 
             // if the length is equal or more than the length, then simulate movement
             if (last.length >= length) {
-                return [...last.slice(1), pos];
+                return [...last.slice(1), snakeHead];
             };
 
             // if it is not longer, then append the snake
-            return [...last, pos];
+            return [...last, snakeHead];
         });
     }, [move]);
 

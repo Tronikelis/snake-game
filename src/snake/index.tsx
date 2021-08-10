@@ -122,12 +122,13 @@ const Snake: FC = () => {
         <div className={classes.root}>
             <h1>Tronikel's shitty snake game</h1>
             <Board
-                pos={{
+                snakeHead={{
                     x: posX,
                     y: posY,
                 }}
-                length={length}
                 move={move}
+
+                length={length}
                 food={food}
                 onEat={handleEat}
             />
