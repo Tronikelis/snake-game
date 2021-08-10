@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useState } from "react";
 
 import { makeStyles, createStyles } from "@material-ui/styles";
@@ -40,18 +41,17 @@ type Color = "gray" | "green";
 const Board: FC<BoardProps> = ({ pos, length, moving }) => {
     const classes = useStyles();
     
-    
-    // linked list?
+    // here is the array of the snake's body -> Position[], could've used a linked list
     const [previous, setPrevious] = useState<BoardProps["pos"][]>([]);
 
     useEffect(() => {
         setPrevious(last => {
-            // if the length is equal or more than the length then simulate movement
+            // if the length is equal or more than the length, then simulate movement
             if (last.length >= length) {
                 return [...last.slice(1), pos];
             };
 
-            // if it is not longer then append the snake
+            // if it is not longer, then append the snake
             return [...last, pos];
         });
     }, [moving, length]);

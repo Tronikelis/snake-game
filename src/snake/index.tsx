@@ -33,11 +33,11 @@ const Snake: FC = () => {
     // current movement state
     const [moving, setMoving] = useState<Movement>("backwards");
 
-    // snake pos state
+    // snake's current position
     const [posX, setPosX] = useState(1);
     const [posY, setPosY] = useState(1);
 
-    // every 0.5 second move the snake 
+    // every 0.35 second move the snake 
     useInterval(() => {
     // handle which way are we moving
         switch (moving) {
@@ -55,6 +55,7 @@ const Snake: FC = () => {
             
             case "left":
                 setPosX(prev => prev - 1);
+                break;
         };
 
         setMove(prev => !prev);
@@ -62,7 +63,6 @@ const Snake: FC = () => {
 
     // handle movement
     useEventListener("keydown", (event: KeyboardEvent) => {
-
         // w = 87
         // a = 65
         // s = 83
@@ -85,7 +85,7 @@ const Snake: FC = () => {
 
     return (
         <div className={classes.root}>
-            <h1>Tronikel's shitty snake game</h1>
+            <h5>Tronikel's shitty snake game</h5>
             <Board
                 pos={{
                     x: posX,
