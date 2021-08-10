@@ -85,13 +85,13 @@ const Snake: FC = () => {
 
     return (
         <div className={classes.root}>
-            <h5>Tronikel's shitty snake game</h5>
+            <h1>Tronikel's shitty snake game</h1>
             <Board
                 pos={{
                     x: posX,
                     y: posY,
                 }}
-                length={3}
+                length={1}
                 moving={move}
             />
         </div>
