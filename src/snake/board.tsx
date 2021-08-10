@@ -4,8 +4,8 @@ import { makeStyles, createStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles(theme => createStyles({
     root: {
-        width: "100%",
-        height: "100%",
+        // width: "100%",
+        // height: "100%",
         display: "grid",
         placeItems: "center",
     },
@@ -46,25 +46,18 @@ const Board: FC<BoardProps> = ({ pos, length, moving }) => {
 
     useEffect(() => {
         setPrevious(last => {
-            // remove the tail is longer
+            // if the length is equal or more than the length then simulate movement
             if (last.length >= length) {
                 return [...last.slice(1), pos];
             };
+
+            // if it is not longer then append the snake
             return [...last, pos];
         });
     }, [moving, length]);
 
-    const handleSnake = (x: number, y: number): Color => {
-       
-        // if (x === cur.x && y === cur.y) return "green";
-        // // check if length is more than 2
-
-        // if (length <= 2) return "gray";
-
-        // if (x === prev.x && y === prev.y) return "green";
-
-        // return "gray";
-        
+    const handleSnakeBody = (x: number, y: number): Color => {
+        // make the snake's body green, and the play area gray
         for (const value of previous) {
             if (x === value.x && y === value.y) return "green";
         };
@@ -85,7 +78,9 @@ const Board: FC<BoardProps> = ({ pos, length, moving }) => {
                                     <div
                                         className={classes.box}
                                         style={{
-                                            backgroundColor: handleSnake(x, y)
+                                            backgroundColor: handleSnakeBody(x, y),
+                                            opacity: handleSnakeBody(x, y) === "gray" ?
+                                                0.4 : 1,
                                         }}
                                         key={x}
                                     />

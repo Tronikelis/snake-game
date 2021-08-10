@@ -1,15 +1,31 @@
 import { FC, useState } from "react";
 
+// independent scoped css from material ui
+import { makeStyles, createStyles } from "@material-ui/styles";
+
 // these packages make this game so much easier to make :P
 import useEventListener from "@use-it/event-listener";
 import { useInterval } from "react-interval-hook";
 
 import Board from "./board";
 
+const useStyles = makeStyles(_ => createStyles({
+    root: {
+        width: "100%",
+        height: "100%",
+
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+    }
+}));
+
 // movement types
 type Movement = "forwards" | "backwards" | "left" | "right";
 
 const Snake: FC = () => {
+    const classes = useStyles();
 
     // should move
     const [move, setMove] = useState(true);
@@ -68,14 +84,17 @@ const Snake: FC = () => {
     });
 
     return (
-        <Board
-            pos={{
-                x: posX,
-                y: posY,
-            }}
-            length={3}
-            moving={move}
-        />
+        <div className={classes.root}>
+            <h1>Tronikel's shitty snake game</h1>
+            <Board
+                pos={{
+                    x: posX,
+                    y: posY,
+                }}
+                length={3}
+                moving={move}
+            />
+        </div>
     );
 };
 export default Snake;
