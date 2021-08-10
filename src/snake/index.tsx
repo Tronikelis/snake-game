@@ -10,16 +10,19 @@ type Movement = "forwards" | "backwards" | "left" | "right";
 
 const Snake: FC = () => {
 
+    // should move
+    const [move, setMove] = useState(true);
+
     // current movement state
-    const [moving, setMoving] = useState<Movement>("right");
+    const [moving, setMoving] = useState<Movement>("backwards");
 
     // snake pos state
     const [posX, setPosX] = useState(1);
     const [posY, setPosY] = useState(1);
 
     // gets the previous state
-    const prevX = usePreviousNumber(posX, 1);
-    const prevY = usePreviousNumber(posY, 1);
+    const prevX = usePreviousNumber(posX, posX);
+    const prevY = usePreviousNumber(posY, posY);
 
     // every 0.5 second move the snake 
     useEffect(() => {
@@ -44,23 +47,23 @@ const Snake: FC = () => {
                     setPosX(prev => prev - 1);
             };
 
-            
+            setMove(prev => !prev);
         }, 500);
 
         // no memory leak
         return () => clearInterval(interval);
     }, [moving]);
 
-    console.log({
-        cur: {
-            x: posX,
-            y: posY,
-        },
-        prev: {
-            x: prevX,
-            y: posY,
-        },
-    });
+    // console.log({
+    //     cur: {
+    //         x: posX,
+    //         y: posY,
+    //     },
+    //     prev: {
+    //         x: prevX,
+    //         y: posY,
+    //     },
+    // });
 
     // handle movement
     useEventListener("keydown", (event: KeyboardEvent) => {
@@ -97,7 +100,8 @@ const Snake: FC = () => {
                     y: prevY,
                 },
             }}
-            length={2}
+            length={3}
+            moving={move}
         />
     );
 };
