@@ -58,6 +58,7 @@ const Snake: FC = () => {
                 break;
         };
 
+        // this state exists just to fire useEffect in my board component
         setMove(prev => !prev);
     }, 350);
 
