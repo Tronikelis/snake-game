@@ -50,7 +50,7 @@ const Snake: FC = () => {
     // snake's current length
     const [length, setLength] = useState(1);
 
-    // every 0.35 second move the snake 
+    // every 0.3 second move the snake 
     useInterval(() => {
     // handle which way are we moving
         switch (moving) {
@@ -73,7 +73,7 @@ const Snake: FC = () => {
 
         // this state exists just to fire useEffect in my board component
         setMove(prev => !prev);
-    }, 350);
+    }, 300);
 
     // handle movement
     useEventListener("keydown", (event: KeyboardEvent) => {
@@ -106,8 +106,8 @@ const Snake: FC = () => {
 
     // food's position
     const [food, setFood] = useState<Coordinates>({
-        x: Math.round(Math.random() * 20),
-        y: Math.round(Math.random() * 20),
+        x: Math.floor(Math.random() * 20),
+        y: Math.floor(Math.random() * 20),
     });
 
     // callback when snake eats the food
@@ -117,8 +117,8 @@ const Snake: FC = () => {
 
         // set new food coords
         setFood(prev => {
-            prev.x = Math.round(Math.random() * 20);
-            prev.y = Math.round(Math.random() * 20);
+            prev.x = Math.floor(Math.random() * 20);
+            prev.y = Math.floor(Math.random() * 20);
             return { ...prev };
         });
     };
