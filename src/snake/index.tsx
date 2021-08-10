@@ -114,6 +114,7 @@ const Snake: FC = () => {
     const handleEat = () => {
         // lengthen the snake
         setLength(prev => prev + 1);
+
         // set new food coords
         setFood(prev => {
             prev.x = Math.round(Math.random() * 20);
@@ -126,6 +127,7 @@ const Snake: FC = () => {
     return (
         <div className={classes.root}>
             <h1>Tronikel's shitty snake game</h1>
+            <h3>Score: {length}</h3>
             <Board
                 snakeHead={{
                     x: posX,
