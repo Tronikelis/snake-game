@@ -72,7 +72,7 @@ const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat }) => {
                 onEat();
             };
 
-            // if the length is equal or more than the length, then simulate movement
+            // if the current length is equal or more than the snake's, then simulate movement
             if (prev.length >= length) {
                 return [...prev.slice(1), snakeHead];
             };
