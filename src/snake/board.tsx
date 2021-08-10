@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 
 import { makeStyles, createStyles } from "@material-ui/styles";
 
-const useStyles = makeStyles(theme => createStyles({
+const useStyles = makeStyles(_ => createStyles({
     root: {
         // width: "100%",
         // height: "100%",

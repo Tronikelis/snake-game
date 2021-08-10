@@ -91,7 +91,7 @@ const Snake: FC = () => {
                     x: posX,
                     y: posY,
                 }}
-                length={1}
+                length={5}
                 moving={move}
             />
         </div>
