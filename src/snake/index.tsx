@@ -1,7 +1,8 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState } from "react";
 
-import { usePreviousNumber } from "react-hooks-use-previous";
+// these packages make this game so much easier to make :P
 import useEventListener from "@use-it/event-listener";
+import { useInterval } from "react-interval-hook";
 
 import Board from "./board";
 
@@ -20,50 +21,28 @@ const Snake: FC = () => {
     const [posX, setPosX] = useState(1);
     const [posY, setPosY] = useState(1);
 
-    // gets the previous state
-    const prevX = usePreviousNumber(posX, posX);
-    const prevY = usePreviousNumber(posY, posY);
-
     // every 0.5 second move the snake 
-    useEffect(() => {
-        const interval = setInterval(() => {
+    useInterval(() => {
+    // handle which way are we moving
+        switch (moving) {
+            case "forwards":
+                setPosY(prev => prev - 1);
+                break;
+            
+            case "backwards":
+                setPosY(prev => prev + 1);
+                break;
+            
+            case "right":
+                setPosX(prev => prev + 1);
+                break;
+            
+            case "left":
+                setPosX(prev => prev - 1);
+        };
 
-           
-            // handle which way are we moving
-            switch (moving) {
-                case "forwards":
-                    setPosY(prev => prev - 1);
-                    break;
-                
-                case "backwards":
-                    setPosY(prev => prev + 1);
-                    break;
-                
-                case "right":
-                    setPosX(prev => prev + 1);
-                    break;
-                
-                case "left":
-                    setPosX(prev => prev - 1);
-            };
-
-            setMove(prev => !prev);
-        }, 500);
-
-        // no memory leak
-        return () => clearInterval(interval);
-    }, [moving]);
-
-    // console.log({
-    //     cur: {
-    //         x: posX,
-    //         y: posY,
-    //     },
-    //     prev: {
-    //         x: prevX,
-    //         y: posY,
-    //     },
-    // });
+        setMove(prev => !prev);
+    }, 350);
 
     // handle movement
     useEventListener("keydown", (event: KeyboardEvent) => {
@@ -91,14 +70,8 @@ const Snake: FC = () => {
     return (
         <Board
             pos={{
-                cur: {
-                    x: posX,
-                    y: posY,
-                },
-                prev: {
-                    x: prevX,
-                    y: prevY,
-                },
+                x: posX,
+                y: posY,
             }}
             length={3}
             moving={move}

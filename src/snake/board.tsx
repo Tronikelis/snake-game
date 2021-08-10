@@ -28,14 +28,8 @@ const useStyles = makeStyles(theme => createStyles({
 
 interface BoardProps {
     pos: {
-        cur: {
-            x: number;
-            y: number;
-        };
-        prev: {
-            x: number;
-            y: number;
-        };
+        x: number;
+        y: number;
     };
     length: number;
     moving: boolean
@@ -46,18 +40,17 @@ type Color = "gray" | "green";
 const Board: FC<BoardProps> = ({ pos, length, moving }) => {
     const classes = useStyles();
     
-    const { cur, prev } = pos;
     
     // linked list?
-    const [previous, setPrevious] = useState<typeof pos["cur"][]>([]);
+    const [previous, setPrevious] = useState<BoardProps["pos"][]>([]);
 
     useEffect(() => {
         setPrevious(last => {
             // remove the tail is longer
-            if (last.length > length) {
-                return [...last.slice(1), cur];
+            if (last.length >= length) {
+                return [...last.slice(1), pos];
             };
-            return [...last, cur];
+            return [...last, pos];
         });
     }, [moving, length]);
 
