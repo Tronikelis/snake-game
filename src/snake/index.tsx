@@ -85,12 +85,15 @@ const Snake: FC = () => {
             case 87:
                 setMoving("forwards");
                 break;
+            
             case 65:
                 setMoving("left");
                 break;
+            
             case 83:
                 setMoving("backwards");
                 break;
+            
             case 68:
                 setMoving("right");
                 break;
@@ -107,9 +110,11 @@ const Snake: FC = () => {
         y: Math.round(Math.random() * 20),
     });
 
+    // callback when snake eats the food
     const handleEat = () => {
         // lengthen the snake
         setLength(prev => prev + 1);
+        // set new food coords
         setFood(prev => {
             prev.x = Math.round(Math.random() * 20);
             prev.y = Math.round(Math.random() * 20);
