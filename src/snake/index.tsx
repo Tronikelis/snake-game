@@ -139,6 +139,7 @@ const Snake: FC = () => {
      * Game over
     */
 
+    // reload the page when retrying
     const handleRestart = () => {
         location.reload();
     };
