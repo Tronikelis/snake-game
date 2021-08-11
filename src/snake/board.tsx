@@ -55,11 +55,12 @@ interface BoardProps {
      * Callback when the snake eats the food, used to change the food's coordinates
      */
     onEat: () => void;
+    onMove: (body: BoardProps["snakeHead"][]) => void;
 };
 
 type Color = "gray" | "green" | "red";
 
-const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat }) => {
+const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat, onMove }) => {
     const classes = useStyles();
     
     // here is the array of the snake's body -> Position[], could've used a linked list
@@ -71,6 +72,8 @@ const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat }) => {
             if (isEqual(food, snakeHead)) {
                 onEat();
             };
+            // callback when moved
+            onMove(prev);
 
             // if the current length is equal or more than the snake's, then simulate movement
             if (prev.length >= length) {
