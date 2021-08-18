@@ -7,8 +7,12 @@ import { makeStyles, createStyles } from "@material-ui/styles";
 // these packages make this game so much easier to make :P
 import useEventListener from "@use-it/event-listener";
 import { useInterval } from "react-interval-hook";
-import { uniqWith, isEqual } from "lodash";
 
+// lodash functions
+import isEqual from "lodash/isEqual";
+import uniqWith from "lodash/uniqWith"
+
+// snake's board
 import Board from "./board";
 
 const useStyles = makeStyles(_ => createStyles({
@@ -128,10 +132,9 @@ const Snake: FC = () => {
         setLength(prev => prev + 1);
 
         // set new food coords
-        setFood(prev => {
-            prev.x = Math.floor(Math.random() * 20);
-            prev.y = Math.floor(Math.random() * 20);
-            return { ...prev };
+        setFood({
+            x: Math.floor(Math.random() * 20),
+            y: Math.floor(Math.random() * 20),
         });
     };
 

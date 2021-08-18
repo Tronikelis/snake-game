@@ -2,7 +2,7 @@
 import { FC, useEffect, useState } from "react";
 
 import { makeStyles, createStyles } from "@material-ui/styles";
-import { isEqual } from "lodash";
+import isEqual from "lodash/isEqual";
 
 const useStyles = makeStyles(_ => createStyles({
     root: {
