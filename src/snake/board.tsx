@@ -2,9 +2,10 @@
 import { FC, useState } from "react";
 
 import { makeStyles, createStyles } from "@material-ui/styles";
-import { isEqual } from "lodash";
 // useEffect but with deep equality
 import useDeepEffect from "use-deep-compare-effect";
+
+import isEqual from "lodash/isEqual";
 
 const useStyles = makeStyles(_ => createStyles({
     root: {
