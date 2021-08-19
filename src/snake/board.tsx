@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { isEqual } from "lodash";
+// useEffect but with deep equality
+import useDeepEffect from "use-deep-compare-effect";
 
 const useStyles = makeStyles(_ => createStyles({
     root: {
@@ -34,10 +36,6 @@ interface BoardProps {
      */
     length: number;
     /**
-     * State when the snake moves, setState(!state), to fire useEffect
-     */
-    move: boolean;
-    /**
      * Snake's current head position in coordinates
      */
     snakeHead: {
@@ -60,13 +58,13 @@ interface BoardProps {
 
 type Color = "gray" | "green" | "red";
 
-const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat, onMove }) => {
+const Board: FC<BoardProps> = ({ snakeHead, length, food, onEat, onMove }) => {
     const classes = useStyles();
     
     // here is the array of the snake's body -> Position[], could've used a linked list
     const [previous, setPrevious] = useState<BoardProps["snakeHead"][]>([]);
 
-    useEffect(() => {
+    useDeepEffect(() => {
         setPrevious(prev => {
             // see if the food has been eaten
             if (isEqual(food, snakeHead)) {
@@ -83,7 +81,7 @@ const Board: FC<BoardProps> = ({ snakeHead, length, move, food, onEat, onMove })
             // if it is not longer, then append the snake
             return [...prev, snakeHead];
         });
-    }, [move]);
+    }, [snakeHead]);
 
     const handleBoard = (x: number, y: number): Color => {
         // show the food

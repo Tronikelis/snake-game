@@ -39,9 +39,6 @@ const Snake: FC = () => {
      * Movement 
     */
 
-    // should move
-    const [move, setMove] = useState(true);
-
     // current movement state
     const [moving, setMoving] = useState<Movement>("backwards");
 
@@ -82,9 +79,6 @@ const Snake: FC = () => {
             setFailed(true);
             return;
         };
-
-        // this state exists just to fire useEffect in my board component
-        setMove(prev => !prev);
     }, 300);
 
     // handle movement
@@ -168,8 +162,7 @@ const Snake: FC = () => {
                         x: posX,
                         y: posY,
                     }}
-                    move={move}
-
+            
                     length={length}
                     food={food}
                     onEat={handleEat}
