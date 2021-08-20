@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useState } from "react";
+import { useState } from "react";
 
 import { makeStyles, createStyles } from "@material-ui/styles";
 // useEffect but with deep equality
@@ -59,14 +59,14 @@ interface BoardProps {
 
 type Color = "gray" | "green" | "red";
 
-const Board: FC<BoardProps> = ({ snakeHead, length, food, onEat, onMove }) => {
+export default function Board({ snakeHead, length, food, onEat, onMove }: BoardProps) {
     const classes = useStyles();
     
     // here is the array of the snake's body -> Position[], could've used a linked list
-    const [previous, setPrevious] = useState<BoardProps["snakeHead"][]>([]);
+    const [body, setBody] = useState<BoardProps["snakeHead"][]>([]);
 
     useDeepEffect(() => {
-        setPrevious(prev => {
+        setBody(prev => {
             // see if the food has been eaten
             if (isEqual(food, snakeHead)) {
                 onEat();
@@ -89,7 +89,7 @@ const Board: FC<BoardProps> = ({ snakeHead, length, food, onEat, onMove }) => {
         if (x === food.x && y === food.y) return "red";
 
         // make the snake's body green, and the play area gray
-        for (const value of previous) {
+        for (const value of body) {
             if (x === value.x && y === value.y) return "green";
         };
         return "gray";
@@ -126,4 +126,3 @@ const Board: FC<BoardProps> = ({ snakeHead, length, food, onEat, onMove }) => {
         </div>
     );
 };
-export default Board;

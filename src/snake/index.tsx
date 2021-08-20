@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-globals */
-import { FC, useState } from "react";
+import create from "zustand";
+import produce from "immer";
 
 // independent scoped css from material ui
 import { makeStyles, createStyles } from "@material-ui/styles";
@@ -31,61 +32,112 @@ const useStyles = makeStyles(_ => createStyles({
 type Movement = "forwards" | "backwards" | "left" | "right";
 
 // coordinate type
-interface Coordinates {
+type Coordinates = {
     x: number;
     y: number;
 };
 
-const Snake: FC = () => {
+interface GlobalState {
+    movement: {
+        moving: string;
+        pos: {
+            x: number;
+            y: number;
+        };
+        length: number;
+    };
+    failed: boolean;
+    food: {
+        x: number;
+        y: number;
+    };
+
+    setFood: (pos: Coordinates) => void;
+    setMoving: (type: Movement) => void;
+
+    setSnakeX: (x: number) => void;
+    setSnakeY: (y: number) => void;
+
+    setSnakeLength: (length: number) => void;
+    setFailed: (failed: boolean) => void;
+};
+
+const useStore = create<GlobalState>(set => ({
+    movement: {
+        moving: "backwards",
+        pos: {
+            x: 0,
+            y: 0,
+        },
+        length: 1,
+    },
+    failed: false,
+    food: {
+        x: Math.floor(Math.random() * 20),
+        y: Math.floor(Math.random() * 20),
+    },
+
+    setFood: (pos: Coordinates) => set({ food: pos }),
+    setMoving: (type: Movement) => set(produce((state: GlobalState) => {
+        state.movement.moving = type;
+    })),
+    
+    setSnakeX: (x) => set(produce((state: GlobalState) => {
+        state.movement.pos.x += x;
+    })),
+    setSnakeY: (y) => set(produce((state: GlobalState) => {
+        state.movement.pos.y += y;
+    })),
+
+    setSnakeLength: (length: number) => set(produce((state: GlobalState) => {
+        state.movement.length += length;
+    })),
+    setFailed: (failed: boolean) => set({ failed }),
+}));
+
+export default function Snake() {
     const classes = useStyles();
 
     /**
      * Movement 
     */
 
-    // current movement state
-    const [moving, setMoving] = useState<Movement>("backwards");
-
-    // snake's current position
-    const [posX, setPosX] = useState(1);
-    const [posY, setPosY] = useState(1);
-
-    // snake's current length
-    const [length, setLength] = useState(1);
-
-    // if failed state
-    const [failed, setFailed] = useState(false);
+    const {
+        failed, food, movement, setFood, setSnakeLength, setFailed, setMoving, setSnakeX, setSnakeY
+    } = useStore();
 
     // every 0.3 second move the snake 
     useInterval(() => {
-    // handle which way are we moving
-        switch (moving) {
+        // console.log("Moved!", movement);
+        // handle which way are we moving
+        switch (movement.moving) {
             case "forwards":
-                setPosY(prev => prev - 1);
+                setSnakeY(-1);
                 break;
             
             case "backwards":
-                setPosY(prev => prev + 1);
+                setSnakeY(1);
                 break;
             
             case "right":
-                setPosX(prev => prev + 1);
+                setSnakeX(1);
                 break;
             
             case "left":
-                setPosX(prev => prev - 1);
+                setSnakeX(-1);
                 break;
         };
 
+        const { x, y } = movement.pos;
         // see if the player failed
-        if (posX >= 20 || posY >= 20 || posX <= -1 || posY <= -1) {
+        if (x >= 20 || y >= 20 || x <= -1 || y <= -1) {
             console.log("failed");
             setFailed(true);
             return;
         };
     }, 300);
 
-    // handle movement
+    // handle button presses
     useEventListener("keydown", (event: KeyboardEvent) => {
         // w = 87
         // a = 65
@@ -114,16 +166,10 @@ const Snake: FC = () => {
      * Food 
     */
 
-    // food's position
-    const [food, setFood] = useState<Coordinates>({
-        x: Math.floor(Math.random() * 20),
-        y: Math.floor(Math.random() * 20),
-    });
-
     // callback when snake eats the food
     const handleEat = () => {
         // lengthen the snake
-        setLength(prev => prev + 1);
+        setSnakeLength(1);
 
         // set new food coords
         setFood({
@@ -155,18 +201,17 @@ const Snake: FC = () => {
     return (
         <div className={classes.root}>
             <h1>Tronikel's shitty snake game</h1>
-            <h3>Score: {length}</h3>
+            <h3>Score: {movement.length}</h3>
             {failed ? (<>
-                <h1>Game over, score: {length}</h1>
+                <h1>Game over, score: {movement.length}</h1>
                 <button onClick={handleRestart}>Retry?</button>
             </>) : (        
                 <Board
                     snakeHead={{
-                        x: posX,
-                        y: posY,
+                        ...movement.pos
                     }}
             
-                    length={length}
+                    length={movement.length}
                     food={food}
                     onEat={handleEat}
                     onMove={handleMove}    
@@ -175,4 +220,3 @@ const Snake: FC = () => {
         </div>
     );
 };
-export default Snake;
