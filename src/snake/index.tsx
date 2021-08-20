@@ -82,10 +82,10 @@ const useStore = create<GlobalState>(set => ({
         state.movement.moving = type;
     })),
     
-    setSnakeX: (x) => set(produce((state: GlobalState) => {
+    setSnakeX: (x: number) => set(produce((state: GlobalState) => {
         state.movement.pos.x += x;
     })),
-    setSnakeY: (y) => set(produce((state: GlobalState) => {
+    setSnakeY: (y: number) => set(produce((state: GlobalState) => {
         state.movement.pos.y += y;
     })),
 
