@@ -59,7 +59,7 @@ interface GlobalState {
 
     setSnakeLength: (length: number) => void;
     setFailed: (failed: boolean) => void;
-}
+};
 
 const useStore = create<GlobalState>((set) => ({
     movement: {
@@ -147,7 +147,7 @@ export default function Snake() {
             case 68:
                 moving.current = "right";
                 break;
-        }
+        };
     });
 
     useEffect(() => {
@@ -171,7 +171,7 @@ export default function Snake() {
                     case "left":
                         setSnakeX(-1);
                         break;
-                }
+                };
 
                 const { x, y } = movement.pos;
                 // see if the player failed
@@ -179,7 +179,7 @@ export default function Snake() {
                     console.log("failed");
                     setFailed(true);
                     return;
-                }
+                };
 
                 timeOut(interval.current);
             }, ms);
@@ -252,4 +252,4 @@ export default function Snake() {
             )}
         </div>
     );
-}
+};
